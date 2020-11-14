@@ -1,6 +1,8 @@
 # backend-Specification-Pattern
 ## Specification Pattern
 ### Main Use Cases.
-- In-memory validation.
-- Retrieving data from database.
-- Construction-to-order.
+1. In-memory validation. 
+2. Retrieving data from database.
+3. Construction-to-order.
+
+The most common use case: 1,2

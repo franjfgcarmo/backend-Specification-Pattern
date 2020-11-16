@@ -16,7 +16,25 @@ namespace SpecPattern.Infrastructure.UnitOfWork
         {
             this.context = context;
         }
-      
+
+        #region [Disposable]
+        ~UnitOfWork()
+        {
+            Dispose(false);
+        }
+
+        public virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                this.context.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(false);
+        }
+        #endregion
+
         public IAsyncRepository<T> Repository<T>()
         {
             if (_repositories == null)
@@ -26,7 +44,7 @@ namespace SpecPattern.Infrastructure.UnitOfWork
                 return (IAsyncRepository<T>)_repositories[type];
             var repositoryType = typeof(EFRepository<>);
             _repositories.Add(type, Activator.CreateInstance(
-                repositoryType.MakeGenericType(typeof(T)), this)
+                repositoryType.MakeGenericType(typeof(T)), this.context)
             );
             return _repositories[type];
         }

@@ -19,7 +19,8 @@ namespace SpecPattern.Api.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped(typeof(IAsyncRepository<>), typeof(EFRepository<>));
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IDbSpecPattern, DbSpecPattern>();
             return services;
         }
     }

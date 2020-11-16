@@ -1,6 +1,8 @@
-﻿namespace SpecPattern.Domain
+﻿using System;
+
+namespace SpecPattern.Domain
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork:IDisposable
     {
         void SaveChanges();
         IAsyncRepository<T> Repository<T>();

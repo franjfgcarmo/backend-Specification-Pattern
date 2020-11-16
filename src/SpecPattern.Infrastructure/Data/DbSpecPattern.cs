@@ -14,6 +14,7 @@ namespace SpecPattern.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.SeedInitial();
             modelBuilder.ConfigurationBuilder();
             base.OnModelCreating(modelBuilder);
         }

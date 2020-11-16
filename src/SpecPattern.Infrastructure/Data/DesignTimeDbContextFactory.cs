@@ -11,7 +11,7 @@ namespace SpecPattern.Infrastructure.Data
         public DbSpecPattern CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<DbSpecPattern>();
-            builder.UseNpgsql("Server=127.0.0.1;port=5432;Database=SpecPattern;User Id=SpecPattern;Password=SpecPattern;Persist Security Info=true;").UseSnakeCaseNamingConvention();
+            builder.UseNpgsql("Server=127.0.0.1;port=5432;Database=spect_pattern;User Id=spect_pattern_user;Password=spect_pattern_user!;Persist Security Info=true;").UseSnakeCaseNamingConvention();
             return new DbSpecPattern(builder.Options);
         }
     }

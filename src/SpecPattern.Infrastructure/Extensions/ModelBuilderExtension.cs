@@ -57,7 +57,7 @@ namespace SpecPattern.Infrastructure.Extensions
                     MpaaRating = MpaaRating.PG13 },
                 new Movie 
                 {
-                    Id = 5,
+                    Id = 6,
                     Name = "The Mummy",
                     ReleaseDate = DateTime.Now, 
                     Genre = "Action",

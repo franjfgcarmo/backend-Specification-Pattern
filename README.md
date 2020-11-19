@@ -31,3 +31,30 @@ The most common use case: 1,2
 - New purchase options
 - Couldn't reuse domain knowledge efficiently
 - Had to either introduce duplication, or realy on inefficient SQL queries
+
+## Module 2.Summary.
+
+### How LINQ works
+
+- IEnumerable and IQueryable
+- C# lambda can compile to either a delegate or an expression
+- C# expressions can compile to delegates
+
+### Using plain C# expressions
+
+- Help get rid of duplication
+- Don’t provide proper encapsulation
+
+### Generic specifications
+
+- A thin wrapper on top of expressions
+
+### Returning IQueryable from a repository
+
+- Violates LSP
+- This is an anti-pattern. The problem here that IQueryable allow for arbitrary expressions in the Where methods that work on top of it, and that means the client of the repository can easily do somenthing tha the ORM doesn´t suppport.
+- Can cause runtine exceptions.
+- Could be fine for small project.
+- Not suitable for medium and large projects.
+- Never return IQueryable from your public methods, instead of IQueryable it´s a good idea to return IReadOnlyList because it represents an in-memory Collection, and unlike IQueryable you can use any lambda expression.
+- Return IEnumerable is better IQueryable, if get an IEnumerable from some data access code, then this code closes the connection to the database before you actually use that IEnumerable. After that you try to enemerate the items in that collection. This would result in an exception because having IEnumerable añone doesn´t guarantee that your data is in the memory already. ORMs try to defer the actual data retrieval to a later stage for performance gains, which is good in some cases

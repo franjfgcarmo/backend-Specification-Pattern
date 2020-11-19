@@ -37,9 +37,9 @@ namespace SpecPattern.Infrastructure.Repositories
             _dbContext.Set<T>().Remove(entity);            
         }
 
-        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate) => await _dbContext.Set<T>()
+        public async Task<IEnumerable<T>> FindAsync(GenericSpecification<T> genericSpecification) => await _dbContext.Set<T>()
             .AsQueryable()
-            .Where(predicate)
+            .Where(genericSpecification.Expression)
             .ToListAsync();
 
         public virtual async Task<T> GetAsync(int id) => await _dbContext.Set<T>().FindAsync(id);

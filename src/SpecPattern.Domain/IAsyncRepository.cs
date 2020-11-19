@@ -13,7 +13,7 @@ namespace SpecPattern.Domain
         void DeleteAsync(T entity);
         Task<T> GetAsync(int id);
         Task<IEnumerable<T>> AllAsync();
-        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> FindAsync(GenericSpecification<T> genericSpecification);
         Task<int> CountAsync(Expression<Func<T, bool>> predicate);
         Task<int> CountAsync();
         IQueryable<T> TableNoTracking { get; }

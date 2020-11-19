@@ -27,9 +27,9 @@ namespace SpecPattern.Api.EndPoints
         public async Task<IActionResult> GetAsync(FilterMovie filterMovie)
         {
             //Expression<Func<Movie, bool>> expresion = filterMovie.ForKidsOnly ? Movie.IsSuitableForChildren : x => true;
-            Expression<Func<Movie, bool>> expresion = filterMovie.OnCd ? Movie.HasCdVersion : x => true;
+            var specification = new GenericSpecification<Movie>(Movie.IsSuitableForChildren);
             var result = await _unitOfWork.Repository<Movie>()
-                .FindAsync(expresion);
+                .FindAsync(specification);
             return result is null ? NotFound() : (IActionResult)Ok(result.ToList());
         }
 
@@ -55,8 +55,8 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            Func<Movie, bool> isSuitableForChildren = Movie.IsSuitableForChildren.Compile();
-            if (!isSuitableForChildren(result)) {
+            var specification = new GenericSpecification<Movie>(Movie.IsSuitableForChildren);
+            if (!specification.IsSatisFiedBy(result)) {
                 return Conflict("The mvie is not sutable for children");
             }
             return Ok(result);
@@ -68,8 +68,8 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            Func<Movie, bool> hasCdVersion = Movie.HasCdVersion.Compile();
-            if (!hasCdVersion(result))
+            var specification = new GenericSpecification<Movie>(Movie.HasCdVersion);
+            if (!specification.IsSatisFiedBy(result))
             {
                 return Conflict("The movie doesn´t have a CD version");
             }

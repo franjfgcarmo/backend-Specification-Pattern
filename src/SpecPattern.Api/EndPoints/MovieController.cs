@@ -56,7 +56,7 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            if (result.MpaaRating > MpaaRating.PG) {
+            if (!result.IsSuitableForChildren()) {
                 return Conflict("The mvie is not sutable for children");
             }
             return Ok(result);
@@ -68,7 +68,7 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            if (result.ReleaseDate <= DateTime.Now.AddMonths(-1))
+            if (!result.HasCdVersion())
             {
                 return Conflict("The movie doesn´t have a CD version");
             }

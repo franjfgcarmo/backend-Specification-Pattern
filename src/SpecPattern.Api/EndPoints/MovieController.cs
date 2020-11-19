@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,10 @@ namespace SpecPattern.Api.EndPoints
         [HttpGet]
         public async Task<IActionResult> GetAsync(FilterMovie filterMovie)
         {
+            //Expression<Func<Movie, bool>> expresion = filterMovie.ForKidsOnly ? Movie.IsSuitableForChildren : x => true;
+            Expression<Func<Movie, bool>> expresion = filterMovie.OnCd ? Movie.HasCdVersion : x => true;
             var result = await _unitOfWork.Repository<Movie>()
-                .FindAsync(w =>
-                (w.MpaaRating <= MpaaRating.PG || !filterMovie.ForKidsOnly) &&
-                w.Rating >= filterMovie.MinimunRating &&
-                (w.ReleaseDate <= DateTime.Now.AddMonths(-12) || !filterMovie.OnCd)
-                );
+                .FindAsync(expresion);
             return result is null ? NotFound() : (IActionResult)Ok(result.ToList());
         }
 
@@ -56,7 +55,8 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            if (!result.IsSuitableForChildren()) {
+            Func<Movie, bool> isSuitableForChildren = Movie.IsSuitableForChildren.Compile();
+            if (!isSuitableForChildren(result)) {
                 return Conflict("The mvie is not sutable for children");
             }
             return Ok(result);
@@ -68,7 +68,8 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            if (!result.HasCdVersion())
+            Func<Movie, bool> hasCdVersion = Movie.HasCdVersion.Compile();
+            if (!hasCdVersion(result))
             {
                 return Conflict("The movie doesn´t have a CD version");
             }

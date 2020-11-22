@@ -5,6 +5,8 @@ using SpecPattern.Api.EndPoints.Models;
 using SpecPattern.Domain;
 using SpecPattern.Domain.Entities;
 using SpecPattern.Domain.Spedifications;
+using SpecPattern.Domain.Spedifications.Implementations;
+using SpecPattern.Infrastructure.Repositories;
 
 namespace SpecPattern.Api.EndPoints
 {
@@ -32,8 +34,12 @@ namespace SpecPattern.Api.EndPoints
             {
                 spec = spec.And(new AvailabeOnCDSpecification());
             }
-            var result = await _unitOfWork.Repository<Movie>()
-                .FindAsync(spec);
+            var repository =(MovieRepository) _unitOfWork.Repository<Movie>();
+            var result =await repository.FindAsync(
+                spec,
+                filterMovie.MinimunRating,
+                filterMovie.Page,
+                filterMovie.PageSize);
             return result is null ? NotFound() : (IActionResult)Ok(result.ToList());
         }
 

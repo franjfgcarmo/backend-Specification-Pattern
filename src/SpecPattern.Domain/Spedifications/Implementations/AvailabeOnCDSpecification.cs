@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace SpecPattern.Domain.Spedifications
+namespace SpecPattern.Domain.Spedifications.Implementations
 {
     public sealed class AvailabeOnCDSpecification : Specification<Movie>
     {

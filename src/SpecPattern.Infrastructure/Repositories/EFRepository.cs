@@ -37,7 +37,7 @@ namespace SpecPattern.Infrastructure.Repositories
             _dbContext.Set<T>().Remove(entity);            
         }
 
-        public async Task<IReadOnlyList<T>> FindAsync(Specification<T> specification) => await _dbContext.Set<T>()
+        public virtual async Task<IReadOnlyList<T>> FindAsync(Specification<T> specification) => await _dbContext.Set<T>()
             .AsQueryable()
             .Where(specification.ToExpression())
             .ToListAsync();

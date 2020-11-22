@@ -10,6 +10,7 @@ namespace SpecPattern.Infrastructure.Data.Configurations
         {
             builder.Property(p => p.Name).HasMaxLength(100).IsRequired();
             builder.Property(p => p.Genre).HasMaxLength(50).IsRequired();
+            builder.HasOne(ho => ho.Director).WithMany().HasForeignKey(fk => fk.DirectorId);
         }
     }
 }

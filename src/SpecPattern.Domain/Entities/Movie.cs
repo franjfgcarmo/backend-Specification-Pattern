@@ -9,5 +9,7 @@ namespace SpecPattern.Domain.Entities
         public virtual MpaaRating MpaaRating { get; set; }
         public virtual string Genre { get; set; }
         public virtual double Rating { get; set; }
+        public virtual int DirectorId { get; set; }
+        public virtual Director Director { get; set; }
     }
 }

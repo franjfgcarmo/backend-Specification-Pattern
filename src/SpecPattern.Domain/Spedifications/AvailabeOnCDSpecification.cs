@@ -9,7 +9,7 @@ namespace SpecPattern.Domain.Spedifications
     public sealed class AvailabeOnCDSpecification : Specification<Movie>
     {
         private const int MonthsBeforeDVDIsOut = 12;
-        public override Expression<Func<Movie, bool>> ToExpresion()
+        public override Expression<Func<Movie, bool>> ToExpression()
         {
             return movie => movie.ReleaseDate <= DateTime.Now.AddMonths(-MonthsBeforeDVDIsOut);
         }

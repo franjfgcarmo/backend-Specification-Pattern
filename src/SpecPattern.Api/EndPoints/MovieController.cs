@@ -23,8 +23,17 @@ namespace SpecPattern.Api.EndPoints
         [HttpGet]
         public async Task<IActionResult> GetAsync(FilterMovie filterMovie)
         {
+            Specification<Movie> spec = Specification<Movie>.All;
+            if (filterMovie.ForKidsOnly)
+            {
+                spec = spec.And(new MovieForKidsSpecification());
+            }
+            if (filterMovie.OnCd) 
+            {
+                spec = spec.And(new AvailabeOnCDSpecification());
+            }
             var result = await _unitOfWork.Repository<Movie>()
-                .FindAsync(new MovieForKidsSpecification());
+                .FindAsync(spec);
             return result is null ? NotFound() : (IActionResult)Ok(result.ToList());
         }
 

@@ -30,7 +30,7 @@ namespace SpecPattern.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<T>> AllAsync() => await _dbContext.Set<T>().AsNoTracking().ToListAsync();
 
-        public async Task<int> CountAsync(Specification<T> specification) => await _dbContext.Set<T>().CountAsync(specification.ToExpresion());
+        public async Task<int> CountAsync(Specification<T> specification) => await _dbContext.Set<T>().CountAsync(specification.ToExpression());
         public async Task<int> CountAsync() => await _dbContext.Set<T>().CountAsync();
         public void DeleteAsync(T entity)
         {
@@ -39,7 +39,7 @@ namespace SpecPattern.Infrastructure.Repositories
 
         public async Task<IReadOnlyList<T>> FindAsync(Specification<T> specification) => await _dbContext.Set<T>()
             .AsQueryable()
-            .Where(specification.ToExpresion())
+            .Where(specification.ToExpression())
             .ToListAsync();
 
         public async Task<T> GetAsNoTrackingAsync(int id) => await _dbContext.Set<T>()

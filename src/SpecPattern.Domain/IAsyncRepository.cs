@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SpecPattern.Domain.Spedifications;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -12,10 +13,10 @@ namespace SpecPattern.Domain
         T UpdateAsync(T entity);
         void DeleteAsync(T entity);
         Task<T> GetAsync(int id);
-        Task<IEnumerable<T>> AllAsync();
-        Task<IEnumerable<T>> FindAsync(GenericSpecification<T> genericSpecification);
-        Task<int> CountAsync(Expression<Func<T, bool>> predicate);
+        Task<T> GetAsNoTrackingAsync(int id);
+        Task<IReadOnlyList<T>> AllAsync();
+        Task<IReadOnlyList<T>> FindAsync(Specification<T> specification);
+        Task<int> CountAsync(Specification<T> specification);
         Task<int> CountAsync();
-        IQueryable<T> TableNoTracking { get; }
     }
 }

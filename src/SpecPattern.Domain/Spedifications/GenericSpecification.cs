@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace SpecPattern.Domain
+namespace SpecPattern.Domain.Spedifications
 {
     public class GenericSpecification<T>
     {
         public Expression<Func<T, bool>> Expression { get; }
 
-        public GenericSpecification(Expression<Func<T, bool>> expression) {
+        public GenericSpecification(Expression<Func<T, bool>> expression)
+        {
             Expression = expression;
         }
 

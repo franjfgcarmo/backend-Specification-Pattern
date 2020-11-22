@@ -1,6 +1,8 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using SpecPattern.Domain;
+using SpecPattern.Domain.Entities;
+using SpecPattern.Domain.Spedifications;
 using SpecPattern.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SpecPattern.Infrastructure.Repositories
 {
-    public class EFRepository<T> : IAsyncRepository<T> where T : class
+    public class EFRepository<T> : IAsyncRepository<T> where T : BaseEntity
     {
         protected readonly IDbSpecPattern _dbContext;
 
@@ -20,27 +22,29 @@ namespace SpecPattern.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public IQueryable<T> TableNoTracking => _dbContext.Set<T>().AsQueryable<T>().AsNoTracking();
-
         public async Task<T> AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
             return entity;
         }
 
-        public async Task<IEnumerable<T>> AllAsync() => await _dbContext.Set<T>().AsNoTracking().ToListAsync();
+        public async Task<IReadOnlyList<T>> AllAsync() => await _dbContext.Set<T>().AsNoTracking().ToListAsync();
 
-        public async Task<int> CountAsync(Expression<Func<T, bool>> predicate) => await _dbContext.Set<T>().CountAsync(predicate);
+        public async Task<int> CountAsync(Specification<T> specification) => await _dbContext.Set<T>().CountAsync(specification.ToExpresion());
         public async Task<int> CountAsync() => await _dbContext.Set<T>().CountAsync();
         public void DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);            
         }
 
-        public async Task<IEnumerable<T>> FindAsync(GenericSpecification<T> genericSpecification) => await _dbContext.Set<T>()
+        public async Task<IReadOnlyList<T>> FindAsync(Specification<T> specification) => await _dbContext.Set<T>()
             .AsQueryable()
-            .Where(genericSpecification.Expression)
+            .Where(specification.ToExpresion())
             .ToListAsync();
+
+        public async Task<T> GetAsNoTrackingAsync(int id) => await _dbContext.Set<T>()
+            .AsNoTracking()
+            .FirstOrDefaultAsync(w=>w.Id ==  id);
 
         public virtual async Task<T> GetAsync(int id) => await _dbContext.Set<T>().FindAsync(id);
 

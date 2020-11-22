@@ -58,3 +58,13 @@ The most common use case: 1,2
 - Not suitable for medium and large projects.
 - Never return IQueryable from your public methods, instead of IQueryable it´s a good idea to return IReadOnlyList because it represents an in-memory Collection, and unlike IQueryable you can use any lambda expression.
 - Return IEnumerable is better IQueryable, if get an IEnumerable from some data access code, then this code closes the connection to the database before you actually use that IEnumerable. After that you try to enemerate the items in that collection. This would result in an exception because having IEnumerable añone doesn´t guarantee that your data is in the memory already. ORMs try to defer the actual data retrieval to a later stage for performance gains, which is good in some cases
+
+## Module 3.Summary.
+
+#### **Specificatons: General Guidelines**
+
+- We solved the problem with encapsulation. The client code now doesn´t have to deal with low-level implementation details.
+- Easier to work.
+- Avoid ISpecifacion Interface.
+- Make specification as specific as possible.
+- Make specifications inmutable

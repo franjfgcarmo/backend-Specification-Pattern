@@ -68,3 +68,29 @@ The most common use case: 1,2
 - Avoid ISpecifacion Interface.
 - Make specification as specific as possible.
 - Make specifications inmutable
+
+#### **Recap: Combining Specifications**
+
+- Combining specifications together.
+- Theree types of combinations: And, Or and Not.
+- Identity Specification, it´s an implementation of the null object design pattern .
+- Usefull for dynamic search queries.
+
+#### **_When Not to use Specificartions_**
+
+- Only 1 out of 3 use cases. X
+- Already low maintenance cost.
+- Benefits might not justify the investment
+
+#### **_When use Specificartions_**
+
+- Have t least 2 out of 3 use cases.
+- Codebase is complex enuough.
+
+### **Recap: Working with Multiple Classes**
+
+- You can use specifications for related classes as well.
+- Eagerly load all related object whe you fetch data from the database.
+
+overkill, domain classes would work just fine here.
+But in more complex enterprise-level applications it´s usually a good idea not to use domain object when displaying data on the UI.

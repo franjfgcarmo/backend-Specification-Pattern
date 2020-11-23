@@ -94,3 +94,41 @@ The most common use case: 1,2
 
 overkill, domain classes would work just fine here.
 But in more complex enterprise-level applications it´s usually a good idea not to use domain object when displaying data on the UI.
+
+### Summary
+
+Proper encapsulation and efficient database queries
+
+- Specifications should contain the domain knowledge
+
+General guidelines
+
+- Don’t use the ISpecification interface
+- Make specifications as specific as possible
+- Make specifications immutable
+
+Combining specifications together
+
+- And, Or, and Not
+- Identity specification
+
+When not to use the Specification pattern
+
+Combining specifications with regular filtration
+
+Creation of new objects
+
+Use cases for the specification pattern
+
+- In-memory validation
+- Querying the database
+- Creation of new objects
+
+Plain C# expressions and generic specifications are not enough
+
+Use strongly typed specifications
+
+**Resources**
+
+- https://enterprisecraftsmanship.com/posts/dry-revisited/
+- https://martinfowler.com/apsupp/spec.pdf

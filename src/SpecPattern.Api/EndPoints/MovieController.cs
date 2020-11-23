@@ -23,24 +23,39 @@ namespace SpecPattern.Api.EndPoints
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAsync(FilterMovie filterMovie)
+        public async Task<IActionResult> GetAsync([FromQuery]FilterMovie filterMovie)
         {
             Specification<Movie> spec = Specification<Movie>.All;
             if (filterMovie.ForKidsOnly)
             {
                 spec = spec.And(new MovieForKidsSpecification());
             }
-            if (filterMovie.OnCd) 
+            if (filterMovie.OnCd)
             {
                 spec = spec.And(new AvailabeOnCDSpecification());
             }
-            var repository =(MovieRepository) _unitOfWork.Repository<Movie>();
-            var result =await repository.FindAsync(
+            if (!string.IsNullOrWhiteSpace(filterMovie.Director))
+            {
+                spec = spec.And(new MovieDirectedBySpecification(filterMovie.Director));
+            }
+            var repository = (MovieRepository)_unitOfWork.Repository<Movie>();
+            var result = await repository.FindAsync(
                 spec,
                 filterMovie.MinimunRating,
                 filterMovie.Page,
                 filterMovie.PageSize);
-            return result is null ? NotFound() : (IActionResult)Ok(result.ToList());
+
+            var movieDto = result.Select(s => new MovieDto
+            {
+                Id = s.Id,
+                Director = s.Director.Name,
+                Genre = s.Genre,
+                MpaaRating = s.MpaaRating.ToString(),
+                Name = s.Name,
+                Rating = s.Rating,
+                ReleaseDate = s.ReleaseDate
+            });
+            return result is null ? NotFound() : (IActionResult)Ok(movieDto.ToList());
         }
 
         [HttpGet]
@@ -66,7 +81,8 @@ namespace SpecPattern.Api.EndPoints
             if (result is null)
                 return NotFound();
             var specification = new MovieForKidsSpecification();
-            if (!specification.IsSatisfiedBy(result)) {
+            if (!specification.IsSatisfiedBy(result))
+            {
                 return Conflict("The mvie is not sutable for children");
             }
             return Ok(result);
@@ -78,7 +94,7 @@ namespace SpecPattern.Api.EndPoints
             var result = await _unitOfWork.Repository<Movie>().GetAsync(movieId);
             if (result is null)
                 return NotFound();
-            var specification = new  AvailabeOnCDSpecification();
+            var specification = new AvailabeOnCDSpecification();
             if (!specification.IsSatisfiedBy(result))
             {
                 return Conflict("The movie doesn´t have a CD version");

@@ -20,15 +20,15 @@ namespace SpecPattern.Infrastructure.Repositories
             Specification<Movie> specification,
             double minimunRating,
             int page = 0,
-            int pageSize = 4)
-        {
-           return  await _dbContext.Set<Movie>()
-             .AsQueryable()
-             .Where(specification.ToExpression())
-             .Where(w=> w.Rating >= minimunRating)
-             .Skip(page * pageSize)
-             .Take(pageSize)
-             .ToListAsync();
-        }
+            int pageSize = 4) => await _dbContext.Set<Movie>()
+            .AsQueryable()
+            .AsNoTracking()
+            .Include(i=>i.Director)
+            .Where(specification.ToExpression())
+            .Where(w=> w.Rating >= minimunRating)
+            .Skip(page * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
     }
 }
